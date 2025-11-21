@@ -1,5 +1,13 @@
 import db from "../config/db.js";
-
+export const findRecord = async (table, condition) => {
+  try {
+    const query = `SELECT * FROM ${table} WHERE ${condition}`;
+    const [rows] = await db.query(query);
+    return rows; // returns array of matched records
+  } catch (error) {
+    throw error; // pass error to controller
+  }
+};
 export const createRecord = async (table, data) => {
   try {
     const keys = Object.keys(data);

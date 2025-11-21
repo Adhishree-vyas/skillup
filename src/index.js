@@ -2,6 +2,8 @@ import express from "express";
 import "dotenv/config";
 import db from "./config/db.js"; // <-- IMPORT DB HERE
 import userRoutes from "./routers/user.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const app = express();
 

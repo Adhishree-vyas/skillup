@@ -1,6 +1,7 @@
 import Joi from "joi";
 
 export const registerSchema = Joi.object({
+  id: Joi.number().required(),
   name: Joi.string()
     .min(3)
     .pattern(/^[A-Za-z ]+$/)

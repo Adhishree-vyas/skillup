@@ -20,4 +20,4 @@ export const updateProfileSchema = Joi.object({
     .pattern(/^[A-Za-z ]+$/)
     .optional(),
   password: Joi.string().min(6).optional(),
-});
+}).min(1);

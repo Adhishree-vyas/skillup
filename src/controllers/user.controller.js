@@ -97,10 +97,6 @@ export const updateUserProfile = async (req, res) => {
     if (password) {
       payload.password = await hashPassword(password);
 
-      if (Object.keys(payload).length === 0) {
-        return Response(req, res, false, 400, null, "Nothing to update", null);
-      }
-
       await updateRecord("user", payload, `id=${userId}`);
     }
 

@@ -8,6 +8,17 @@ export const findRecord = async (table, condition) => {
     throw error; // pass error to controller
   }
 };
+export const updateRecord = async (table, payload, where, params = []) => {
+  const keys = Object.keys(payload)
+    .map((key) => `${key} = ?`)
+    .join(", ");
+
+  const values = Object.values(payload);
+
+  const query = `UPDATE ${table} SET ${keys} WHERE ${where}`;
+  return db.execute(query, [...values, ...params]);
+};
+
 export const createRecord = async (table, data) => {
   try {
     const keys = Object.keys(data);

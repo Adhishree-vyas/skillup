@@ -13,3 +13,11 @@ export const registerSchema = Joi.object({
   password: Joi.string().min(6).required(),
   role: Joi.string().valid("student", "instructor", "admin").required(),
 });
+export const updateProfileSchema = Joi.object({
+  name: Joi.string()
+    .min(2)
+    .max(50)
+    .pattern(/^[A-Za-z ]+$/)
+    .optional(),
+  password: Joi.string().min(6).optional(),
+});

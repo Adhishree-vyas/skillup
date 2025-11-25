@@ -1,4 +1,9 @@
-import { getById, createRecord, findRecord } from "../utils/dbdriver.js";
+import {
+  getById,
+  createRecord,
+  findRecord,
+  updateRecord,
+} from "../utils/dbdriver.js";
 import { Response } from "../utils/response.js";
 import { registerSchema } from "../validators/users.validator.js";
 import { hashPassword, comparePassword } from "../utils/bcrypt.js";
@@ -7,7 +12,8 @@ import { json } from "express";
 
 export const getUserById = async (req, res) => {
   try {
-    const id = req.params.id;
+    console.log(req.user, "user data");
+    const id = req.user?.id;
     const user = await getById("user", id);
 
     if (!user) {
@@ -57,14 +63,14 @@ export const loginUser = async (req, res) => {
     const user = await findRecord("user", `email='${email}'`);
 
     if (user.length === 0) {
-      return Response(req, res, false, 404, null, "Email not found", null);
+      return Response(req, res, false, 400, null, "user does not exist", null);
     }
 
     const foundUser = user[0];
 
     const isMatch = await comparePassword(password, foundUser.password);
     if (!isMatch) {
-      return Response(req, res, false, 401, null, "Invalid password", null);
+      return Response(req, res, false, 400, null, "Invalid password", null);
     }
 
     const token = generateToken({
@@ -74,6 +80,39 @@ export const loginUser = async (req, res) => {
     });
 
     return Response(req, res, true, 200, { token }, "Login successful", null);
+  } catch (error) {
+    console.log(error);
+    return Response(req, res, false, 500, null, "Something went wrong", error);
+  }
+};
+export const updateUserProfile = async (req, res) => {
+  try {
+    const userId = req.user.id; // from auth middleware
+    const { name, password } = req.body;
+
+    //  Build update payload (only name & password allowed
+    const payload = {};
+
+    if (name) payload.name = name;
+    if (password) {
+      payload.password = await hashPassword(password);
+
+      if (Object.keys(payload).length === 0) {
+        return Response(req, res, false, 400, null, "Nothing to update", null);
+      }
+
+      await updateRecord("user", payload, `id=${userId}`);
+    }
+
+    return Response(
+      req,
+      res,
+      true,
+      200,
+      null,
+      "Profile updated successfully",
+      null
+    );
   } catch (error) {
     console.log(error);
     return Response(req, res, false, 500, null, "Something went wrong", error);

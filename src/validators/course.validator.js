@@ -7,6 +7,8 @@ export const createCourseValidator = Joi.object({
   category: Joi.string().min(5).max(100).required(),
   thumbnail: Joi.string().optional(),
 });
+
+
 export const updateCourseValidator = Joi.object({
   title: Joi.string().min(2).max(50).optional(),
   description: Joi.string().min(6).optional(),

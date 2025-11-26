@@ -5,20 +5,23 @@ CREATE TABLE user (
     password VARCHAR(255) NOT NULL,
     role ENUM('Admin', 'Instructor', 'Student') DEFAULT 'Student',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 );
 
-    CREATE TABLE courses (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  title VARCHAR(255) NOT NULL,
-  description TEXT,
-  category VARCHAR(100),
-  price DECIMAL(10,2) DEFAULT 0.00,
-  instructorId INT NOT NULL,
-  thumbnail VARCHAR(255),
-  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  
-  );
-
+CREATE TABLE courses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    category VARCHAR(100),
+    price DECIMAL(10,2) DEFAULT 0.00,
+    instructorId INT NOT NULL,
+    thumbnail VARCHAR(255),
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     
-
+    CONSTRAINT fk_instructorId
+        FOREIGN KEY (instructorId)
+        REFERENCES user(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);

@@ -35,6 +35,15 @@ export const createRecord = async (table, data) => {
     throw error;
   }
 };
+export const getAll = async (table) => {
+  try {
+    const query = `SELECT * FROM ${table}`;
+    const [rows] = await db.query(query);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const getById = async (table, id) => {
   try {

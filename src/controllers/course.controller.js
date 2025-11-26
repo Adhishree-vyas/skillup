@@ -1,5 +1,11 @@
 import { Response } from "../utils/response.js";
-import { createRecord, updateRecord, deleteById } from "../utils/dbdriver.js";
+import {
+  createRecord,
+  updateRecord,
+  deleteById,
+  getById,
+  getAll,
+} from "../utils/dbdriver.js";
 
 export const createCourse = async (req, res) => {
   try {
@@ -17,7 +23,7 @@ export const createCourse = async (req, res) => {
       );
     }
 
-    const instructorId = req.user.id; // instructor ID from auth middleware
+    const instructorId = req.user.id;
     const { title, description, price } = req.body;
 
     // Build payload
@@ -76,7 +82,7 @@ export const updateCourse = async (req, res) => {
       courseId,
       instructorId,
     ]);
-  
+
     return Response(
       req,
       res,
@@ -106,10 +112,9 @@ export const deleteCourse = async (req, res) => {
         null
       );
     }
- 
+
     const courseId = req.params?.id;
     await deleteById("courses", courseId);
-   
 
     return Response(
       req,
@@ -120,6 +125,28 @@ export const deleteCourse = async (req, res) => {
       "course deleted successfully",
       null
     );
+  } catch (error) {
+    console.log(error);
+    return Response(req, res, false, 500, null, "Something went wrong", error);
+  }
+};
+export const viewCourse = async (req, res) => {
+  try {
+    const courseId = req.params?.id;
+    await getById("courses", courseId);
+
+    return Response(req, res, true, 200, null, "course", null);
+  } catch (error) {
+    console.log(error);
+    return Response(req, res, false, 500, null, "Something went wrong", error);
+  }
+};
+export const viewAllCourse = async (req, res) => {
+  try {
+    const courseId = req.params?.id;
+    await getAll("courses", courseId);
+
+    return Response(req, res, true, 200, null, " All courses", null);
   } catch (error) {
     console.log(error);
     return Response(req, res, false, 500, null, "Something went wrong", error);

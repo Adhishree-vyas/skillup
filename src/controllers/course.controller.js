@@ -1,8 +1,6 @@
 import { Response } from "../utils/response.js";
-import { createRecord, updateRecord } from "../utils/dbdriver.js";
-import { validate } from "../middleware/custom.middleware.js";
+import { createRecord, updateRecord, deleteById } from "../utils/dbdriver.js";
 
-import { createCourseValidator } from "../validators/course.validator.js";
 export const createCourse = async (req, res) => {
   try {
     const role = req.user.role;
@@ -47,27 +45,38 @@ export const createCourse = async (req, res) => {
     return Response(req, res, false, 500, null, "Something went wrong", error);
   }
 };
+
 export const updateCourse = async (req, res) => {
   try {
-    const instructorId = req.user.id; // from auth middleware
-    const courseId = req.params.id; // from auth middleware
+    const role = req.user.role;
+    if (role !== "Instructor") {
+      return Response(
+        req,
+        res,
+        false,
+        401,
+        null,
+        "pls login with instructor",
+        null
+      );
+    }
+    const instructorId = req.user?.id;
+    const courseId = req.params?.id;
 
     const { title, description, price, category } = req.body;
 
-    //  Build update payload (only name & password allowed
     const payload = {};
 
     if (title) payload.title = title;
     if (description) payload.description = description;
     if (price) payload.price = price;
     if (category) payload.category = category;
-    //await updateRecord("courses", payload, `id=${instructorId.Id}`);
 
-    await updateRecord("courses", payload, "id = ? AND instructor_id = ?", [
+    await updateRecord("courses", payload, "id = ? AND instructorId = ?", [
       courseId,
       instructorId,
     ]);
-
+  
     return Response(
       req,
       res,
@@ -75,6 +84,40 @@ export const updateCourse = async (req, res) => {
       200,
       null,
       "course updated successfully",
+      null
+    );
+  } catch (error) {
+    console.log(error);
+    return Response(req, res, false, 500, null, "Something went wrong", error);
+  }
+};
+
+export const deleteCourse = async (req, res) => {
+  try {
+    const role = req.user.role;
+    if (role !== "Instructor") {
+      return Response(
+        req,
+        res,
+        false,
+        401,
+        null,
+        "pls login with instructor",
+        null
+      );
+    }
+ 
+    const courseId = req.params?.id;
+    await deleteById("courses", courseId);
+   
+
+    return Response(
+      req,
+      res,
+      true,
+      200,
+      null,
+      "course deleted successfully",
       null
     );
   } catch (error) {

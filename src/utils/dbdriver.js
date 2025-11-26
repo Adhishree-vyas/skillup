@@ -1,4 +1,5 @@
 import db from "../config/db.js";
+
 export const findRecord = async (table, condition) => {
   try {
     const query = `SELECT * FROM ${table} WHERE ${condition}`;

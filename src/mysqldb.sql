@@ -17,7 +17,7 @@ CREATE TABLE courses (
     instructorId INT NOT NULL,
     thumbnail VARCHAR(255),
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     
     CONSTRAINT fk_instructorId
         FOREIGN KEY (instructorId)
@@ -25,3 +25,14 @@ CREATE TABLE courses (
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
+CREATE TABLE enrollments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    studentId INT NOT NULL,
+    courseId INT NOT NULL,
+    
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (studentId) REFERENCES user(id),
+    FOREIGN KEY (courseId) REFERENCES courses(id)
+);
+

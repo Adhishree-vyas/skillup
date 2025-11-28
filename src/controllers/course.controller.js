@@ -54,6 +54,7 @@ export const createCourse = async (req, res) => {
 
 export const updateCourse = async (req, res) => {
   try {
+    const courseId = req.user.id;
     const role = req.user.role;
     if (role !== "Instructor") {
       return Response(
@@ -67,7 +68,7 @@ export const updateCourse = async (req, res) => {
       );
     }
     const instructorId = req.user?.id;
-    const courseId = req.params?.id;
+    // const courseId = req.params?.id;
 
     const { title, description, price, category } = req.body;
 

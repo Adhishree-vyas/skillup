@@ -1,9 +1,4 @@
-import {
-  getById,
-  createRecord,
-  findRecord,
-  updateRecord,
-} from "../utils/dbdriver.js";
+import { getById, createRecord, updateRecord } from "../utils/prismautill.js";
 import { Response } from "../utils/response.js";
 import { registerSchema } from "../validators/users.validator.js";
 import { hashPassword, comparePassword } from "../utils/bcrypt.js";
@@ -33,7 +28,7 @@ export const getUserById = async (req, res) => {
 export const createUser = async (req, res) => {
   try {
     const payload = req.body; // {name, email, password, role}
-    const existingUser = await findRecord("user", `email='${payload.email}'`);
+    const existingUser = await getById("user", `email='${payload.email}'`);
 
     if (existingUser.length > 0) {
       return Response(req, res, false, 400, null, "Email already exists", null);
@@ -60,7 +55,7 @@ export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await findRecord("user", `email='${email}'`);
+    const user = await getById("user", `email='${email}'`);
 
     if (user.length === 0) {
       return Response(req, res, false, 400, null, "user does not exist", null);

@@ -1,6 +1,6 @@
 import { Response } from "../utils/response.js";
 
-import { createRecord, getAll, findRecord } from "../utils/dbdriver.js";
+import { createRecord, getAll, getById } from "../utils/prismautill.js";
 export const studentEnroll = async (req, res) => {
   try {
     const role = req.user.role;
@@ -17,7 +17,7 @@ export const studentEnroll = async (req, res) => {
     }
     const studentId = req.user.id;
     const { courseId } = req.body;
-    const existingUser = await findRecord(
+    const existingUser = await getById(
       "enrollments",
       `studentId='${studentId}' AND courseId='${courseId}'`
     );

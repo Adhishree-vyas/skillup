@@ -2,10 +2,10 @@ import { Response } from "../utils/response.js";
 import {
   createRecord,
   updateRecord,
-  deleteById,
+  deleteRecord,
   getById,
   getAll,
-} from "../utils/dbdriver.js";
+} from "../utils/prismautill.js";
 
 export const createCourse = async (req, res) => {
   try {
@@ -115,7 +115,7 @@ export const deleteCourse = async (req, res) => {
     }
 
     const courseId = req.params?.id;
-    await deleteById("courses", courseId);
+    await deleteRecord("courses", courseId);
 
     return Response(
       req,

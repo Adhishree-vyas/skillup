@@ -10,7 +10,7 @@ export const registerSchema = Joi.object({
     }),
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
-  role: Joi.string().valid("student", "instructor", "admin").required(),
+  role: Joi.string().valid("Student", "Instructor", "Admin").required(),
 });
 export const updateProfileSchema = Joi.object({
   name: Joi.string()

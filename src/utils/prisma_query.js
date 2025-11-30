@@ -1,12 +1,19 @@
-import prisma from "./prisma.js";
+import { prisma } from "../prisma.js";
 
 export const getAll = async (model) => {
   return await prisma[model].findMany();
 };
-export const getById = async (model, id) => {
-  return await prisma[model].findUnique({
-    where: { id: Number(id) },
-  });
+
+
+export const getRecord = async (model, filters = {}) => {
+  try {
+    return await prisma[model].findUnique({
+      where: filters,
+    });
+  } catch (error) {
+    console.error("getRecord Error:", error);
+    throw error;
+  }
 };
 
 export const createRecord = async (model, data) => {

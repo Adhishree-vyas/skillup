@@ -3,9 +3,9 @@ import {
   createRecord,
   updateRecord,
   deleteRecord,
-  getById,
+  getRecord,
   getAll,
-} from "../utils/prismautill.js";
+} from "../utils/prisma_query.js";
 
 export const createCourse = async (req, res) => {
   try {

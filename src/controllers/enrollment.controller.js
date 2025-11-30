@@ -1,6 +1,6 @@
+import { createRecord, getAll, getRecord } from "../utils/prisma_query.js";
 import { Response } from "../utils/response.js";
 
-import { createRecord, getAll, getById } from "../utils/prismautill.js";
 export const studentEnroll = async (req, res) => {
   try {
     const role = req.user.role;
@@ -17,11 +17,8 @@ export const studentEnroll = async (req, res) => {
     }
     const studentId = req.user.id;
     const { courseId } = req.body;
-    const existingUser = await getById(
-      "enrollments",
-      `studentId='${studentId}' AND courseId='${courseId}'`
-    );
-    if (existingUser.length > 0) {
+    const existingUser = await getRecord("enrollments", { studentId, courseId });
+    if (existingUser) {
       return Response(
         req,
         res,

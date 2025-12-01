@@ -134,7 +134,7 @@ export const deleteCourse = async (req, res) => {
 export const viewCourse = async (req, res) => {
   try {
     const courseId = req.params?.id;
-    await getById("courses", courseId);
+    await getRecord("courses", courseId);
 
     return Response(req, res, true, 200, null, "course", null);
   } catch (error) {

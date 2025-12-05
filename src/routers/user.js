@@ -21,23 +21,6 @@ router.put("/profile", auth, validate(updateProfileSchema), updateUserProfile);
 
 /**
  * @swagger
- * tags:
- *   name: User
- *   description: User management APIs
- */
-
-/**
- * @swagger
- * components:
- *   securitySchemes:
- *     bearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
- */
-
-/**
- * @swagger
  * /api/user/login:
  *   post:
  *     tags:
@@ -89,6 +72,7 @@ router.put("/profile", auth, validate(updateProfileSchema), updateUserProfile);
  *               - name
  *               - email
  *               - password
+ *               - role
  *             properties:
  *               name:
  *                 type: string
@@ -99,6 +83,9 @@ router.put("/profile", auth, validate(updateProfileSchema), updateUserProfile);
  *               password:
  *                 type: string
  *                 example: "123456"
+ *               role:
+ *                type : string
+ *                example : "student"
  *     responses:
  *       201:
  *         description: User created successfully

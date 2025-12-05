@@ -6,6 +6,7 @@ import {
   updateCourse,
   deleteCourse,
   viewCourse,
+  viewAllCourse,
 } from "../controllers/course.controller.js";
 import {
   createCourseValidator,
@@ -18,7 +19,7 @@ router.post("/create", auth, validate(createCourseValidator), createCourse);
 router.put("/update", auth, validate(updateCourseValidator), updateCourse);
 router.delete("/delete/:id", auth, deleteCourse);
 router.get("/view/:id", viewCourse);
-router.get("/viewall", viewCourse);
+router.get("/viewall", viewAllCourse);
 /**
  * @swagger
  * tags:
@@ -170,7 +171,6 @@ router.get("/viewall", viewCourse);
  *       500:
  *         description: Server error
  */
-
 /**
  * @swagger
  * /api/course/viewall:
@@ -178,10 +178,50 @@ router.get("/viewall", viewCourse);
  *     tags:
  *       - Course
  *     summary: View all courses
- *     description: Returns a list of all available courses.
+ *     description: Returns a list of all available courses along with pagination details.
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: "Page number (default: 1)"
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: "Items per page (default: 10)"
  *     responses:
  *       200:
  *         description: Successfully fetched all courses
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Course'
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     total:
+ *                       type: integer
+ *                     page:
+ *                       type: integer
+ *                     perPage:
+ *                       type: integer
+ *                     pages:
+ *                       type: integer
+ *                   example:
+ *                     total: 3
+ *                     page: 1
+ *                     perPage: 10
+ *                     pages: 1
  *       500:
  *         description: Server error
  */

@@ -1,4 +1,5 @@
 import { Response } from "../utils/response.js";
+import { paginatedResult, applyFilters } from "../utils/pagination.js";
 import {
   createRecord,
   updateRecord,
@@ -144,10 +145,20 @@ export const viewCourse = async (req, res) => {
 };
 export const viewAllCourse = async (req, res) => {
   try {
-    const courseId = req.params?.id;
-    await getAll("courses", courseId);
+    const { page, perpage } = req.query;
+    // const { category, title, price } = req.query;
+    const result = await getAll("courses");
+    const filters = {
+      category: req.query.category,
+      title: req.query.title,
+      price: req.query.price,
+    };
 
-    return Response(req, res, true, 200, null, " All courses", null);
+    const filteredResult = applyFilters(result, filters);
+
+    const data = await paginatedResult(filteredResult, page, perpage);
+
+    return Response(req, res, true, 200, data, "course", null);
   } catch (error) {
     console.log(error);
     return Response(req, res, false, 500, null, "Something went wrong", error);

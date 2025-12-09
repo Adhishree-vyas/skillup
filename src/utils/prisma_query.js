@@ -43,3 +43,10 @@ export const deleteRecord = async (model, id) => {
     where: { id: Number(id) },
   });
 };
+export const countUsers = () => prisma.user.count();
+
+// Count total courses
+export const countCourses = () => prisma.courses.count();
+
+// Count total enrollments
+export const countEnrollments = () => prisma.enrollments.count();

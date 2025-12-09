@@ -2,11 +2,11 @@ import {
   getRecord,
   createRecord,
   updateRecord,
-  
 } from "../utils/prisma_query.js";
 import { Response } from "../utils/response.js";
 import { hashPassword, comparePassword } from "../utils/bcrypt.js";
 import { generateToken } from "../utils/jwt.js";
+import { sendWelcomeEmail } from "../utils/email.js";
 
 export const getUserById = async (req, res) => {
   try {
@@ -45,13 +45,15 @@ export const createUser = async (req, res) => {
     payload.password = await hashPassword(payload.password);
 
     const result = await createRecord("user", payload);
+    await sendWelcomeEmail(email, payload.name);
+
     return Response(
       req,
       res,
       true,
       200,
       null,
-      "user registered successfully",
+      "user registered successfully & welcome email is sent",
       null
     );
   } catch (error) {
@@ -64,7 +66,7 @@ export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await getRecord("user", {email});
+    const user = await getRecord("user", { email });
     if (!user) {
       return Response(req, res, false, 404, null, "user does not exist", null);
     }

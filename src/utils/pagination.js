@@ -16,7 +16,7 @@ export const paginatedResult = (result, page = 1, perPage = 10) => {
     },
   };
 };
-export const applyFilters = (data, filters = {}) => {
+export const applyFilters = async (data, filters = {}) => {
   let result = [...data];
 
   const { category, price, title } = filters;

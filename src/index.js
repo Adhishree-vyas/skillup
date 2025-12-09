@@ -5,6 +5,7 @@ import userRoutes from "./routers/user.js";
 import courseRoutes from "./routers/course.js";
 import reviewRoutes from "./routers/review.js";
 import enrollRoutes from "./routers/enroll.js";
+import adminRoutes from "./routers/admin.js";
 import { swaggerUi, swaggerSpec } from "./swagger.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -17,6 +18,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/course", courseRoutes);
 app.use("/api/enroll", enrollRoutes);
 app.use("/api/review", reviewRoutes);
+app.use("/api/admin", adminRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Simple route

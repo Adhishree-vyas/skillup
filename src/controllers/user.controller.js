@@ -98,7 +98,16 @@ export const updateUserProfile = async (req, res) => {
 
     if (name) payload.name = name;
     if (password) payload.password = await hashPassword(password);
+    if (req.file) {
+      payload.profileImage = `uploads/${req.file.filename}`;
+      console.log(req.file);
+      //console.log("Stored path:", payload.profileImage);
+    }
+    if (Object.keys(payload).length === 0) {
+      return Response(req, res, false, 400, null, "Nothing to update", null);
+    }
     await updateRecord("user", userId, payload);
+    console.log("Stored path:", payload.profileImage);
 
     return Response(
       req,

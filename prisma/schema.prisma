@@ -18,6 +18,7 @@ model courses {
   updatedAt    DateTime?     @default(now()) @db.Timestamp(0)
   user         user          @relation(fields: [instructorId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "courses_ibfk_1")
   enrollments  enrollments[]
+  review       review[]
 
   @@index([instructorId], map: "instructorId")
 }
@@ -35,27 +36,32 @@ model enrollments {
 }
 
 model user {
-  id          Int           @id @default(autoincrement())
-  name        String        @db.VarChar(100)
-  email       String        @unique(map: "email") @db.VarChar(150)
-  password    String        @db.VarChar(255)
-  role        user_role?    @default(Student)
-  created_at  DateTime?     @default(now()) @db.Timestamp(0)
-  courses     courses[]
-  enrollments enrollments[]
-}
-model Review {
-  id         Int      @id @default(autoincrement())
-  rating     Float
-  comment    String?
-  courseId   Int
-  studentId  Int
-  course     Course   @relation(fields: [courseId], references: [id])
-  student    User     @relation(fields: [studentId], references: [id])
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id           Int           @id @default(autoincrement())
+  name         String        @db.VarChar(100)
+  email        String        @unique(map: "email") @db.VarChar(150)
+  profileImage String?
+  password     String        @db.VarChar(255)
+  role         user_role?    @default(Student)
+  created_at   DateTime?     @default(now()) @db.Timestamp(0)
+  courses      courses[]
+  enrollments  enrollments[]
+  review       review[]
 }
 
+model review {
+  id        Int      @id @default(autoincrement())
+  rating    Float
+  comment   String?
+  courseId  Int
+  studentId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  courses   courses  @relation(fields: [courseId], references: [id], map: "Review_courseId_fkey")
+  user      user     @relation(fields: [studentId], references: [id], map: "Review_studentId_fkey")
+
+  @@index([courseId], map: "Review_courseId_fkey")
+  @@index([studentId], map: "Review_studentId_fkey")
+}
 
 enum user_role {
   Admin

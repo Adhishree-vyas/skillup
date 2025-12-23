@@ -7,11 +7,13 @@ import reviewRoutes from "./routers/review.js";
 import enrollRoutes from "./routers/enroll.js";
 import adminRoutes from "./routers/admin.js";
 import { swaggerUi, swaggerSpec } from "./swagger.js";
+import multer from "multer";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+//import { startCron } from "./cron.js";
 
 const app = express();
-
+//startCron();
 // Middleware
 app.use(express.json());
 app.use("/api/user", userRoutes);
@@ -19,6 +21,8 @@ app.use("/api/course", courseRoutes);
 app.use("/api/enroll", enrollRoutes);
 app.use("/api/review", reviewRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/uploads", express.static("uploads"));
+app.use("/api", userRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Simple route

@@ -4,6 +4,7 @@ import {
   registerSchema,
   updateProfileSchema,
 } from "../validators/users.validator.js";
+import upload from "../middleware/multer.js";
 import { auth } from "../middleware/auth.js";
 import {
   getUserById,
@@ -17,7 +18,13 @@ const router = express.Router();
 router.get("/profile", auth, getUserById);
 router.post("/login", loginUser);
 router.post("/register", validate(registerSchema), createUser);
-router.put("/profile", auth, validate(updateProfileSchema), updateUserProfile);
+router.put(
+  "/profile",
+  auth,
+  upload.single("image"),
+  validate(updateProfileSchema),
+  updateUserProfile
+);
 
 /**
  * @swagger
@@ -113,30 +120,32 @@ router.put("/profile", auth, validate(updateProfileSchema), updateUserProfile);
  *       500:
  *         description: Server error
  */
-
 /**
  * @swagger
  * /api/user/profile:
  *   put:
  *     tags:
  *       - User
- *     summary: Update User Profile
+ *     summary: Update user profile
+ *     description: Update user details like name, email, and profile image
  *     security:
  *       - bearerAuth: []
- *     description: Updates user details like name, email, etc.
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
  *               name:
  *                 type: string
  *                 example: "Updated Name"
- *               email:
+ *               password:
  *                 type: string
- *                 example: "updated@example.com"
+ *                 example: "NewPassword@123"
+ *               image:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       200:
  *         description: Profile updated successfully
